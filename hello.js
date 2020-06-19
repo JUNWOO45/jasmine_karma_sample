@@ -6,5 +6,10 @@ const Hello = {
   },
   getName() {
     return 'my name is junwoo';
+  },
+  getData() {
+    return fetch('https://koreanjson.com/posts/1')
+    .then(response => response.json())
+    .then(json => json)
   }
 };
