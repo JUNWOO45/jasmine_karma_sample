@@ -63,6 +63,12 @@ describe('Hello모듈의', () => {
         expect(content).toEqual(responseJSON.content);
       })
     });
+
+    it('전체 응답 비교', () => {
+      return Hello.getData().then(result => {
+        expect(result).toEqual(responseJSON);
+      }) 
+    })
   });
 
   describe('프로미스를 반환한다면', () => {
@@ -117,12 +123,23 @@ describe('구현 테스트 :: ', () => {
       jasmine.clock().uninstall();
     });
 
-    it('11..', () => {
+    it('타이머콜백 테스트..', () => {
       setTimeout(() => {
         timerCallback();
       }, 0);
 
       expect(timerCallback).not.toHaveBeenCalled();
     })
+  })
+});
+
+describe('비동기 테스트 : ', () => {
+  const pie = Promise.resolve(3.14);
+  it('expectAsync 테스트1', () => {
+    return expectAsync(pie).toBeResolvedTo(3.14);
+  })
+
+  it('expectAsync 테스트2', () => {
+    return expectAsync(pie).not.toBeResolvedTo(3.145);
   })
 })
