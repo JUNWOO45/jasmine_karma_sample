@@ -17,6 +17,25 @@ describe('Hello모듈의', () => {
     })
   });
 
+  describe('getSimpleApiTest 함수를 호출하고', () => {
+    let request;
+
+    beforeEach(() => {
+      jasmine.Ajax.install();
+      Hello.getSimpleApiTest();
+      request = jasmine.Ajax.requests.mostRecent();
+    });
+
+    afterEach(() => {
+      jasmine.Ajax.uninstall();
+    });
+
+    it('HTTP 요청을 보낸다.', () => {
+      const targetUrl = 'http://name';
+      expect(request.url).toBe(targetUrl)
+    })
+  })
+
   describe('getData함수는 응답값', () => {
     const responseJSON = {
       "id": 1,
@@ -44,5 +63,66 @@ describe('Hello모듈의', () => {
         expect(content).toEqual(responseJSON.content);
       })
     });
+  });
+
+  describe('프로미스를 반환한다면', () => {
+    it('해당 프로미스가 해결될 때까지 기다린다', () => {
+      return Hello.getTest().then(result => {
+        expect(result).toEqual({
+          myName: 'junwoo'
+        })
+      })
+    })
   })
 });
+
+describe('구현 테스트 :: ', () => {
+  describe('spy 구현', () => {
+    it('구현', () => {
+      const foo = {
+        getBar() {
+          return 'bar';
+        }
+      };
+
+      spyOn(foo, 'getBar');
+      foo.getBar();
+      expect(foo.getBar).toHaveBeenCalled();
+    })
+  });
+
+  describe('stub구현', () => {
+    it('구현', () => {
+      const foo = {
+        getBar() {
+          return bar;
+        }
+      };
+
+      spyOn(foo, 'getBar').and.returnValue(123123);
+      var bat = foo.getBar();
+      expect(bat).toEqual(123123);
+    })
+  });
+
+  describe('setTimeout 구현', () => {
+    let timerCallback;
+
+    beforeEach(() => {
+      timerCallback = jasmine.createSpy();
+      jasmine.clock().install();
+    });
+
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+
+    it('11..', () => {
+      setTimeout(() => {
+        timerCallback();
+      }, 0);
+
+      expect(timerCallback).not.toHaveBeenCalled();
+    })
+  })
+})
